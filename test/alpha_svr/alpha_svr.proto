@@ -1,0 +1,50 @@
+syntax = "proto2";
+package alphasvr;              // 定义模块名字
+
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+import "phxrpc/rpc/phxrpc.proto";
+
+// 两个数字相加的请求和响应
+message AddTwoDigitsReq {
+    optional int32 lhs = 1;
+    optional int32 rhs = 2;
+
+}
+message AddTwoDigitsResp {
+    optional int32 sum = 1;
+
+}
+
+// 若干个数字相加的请求和响应
+message AddSomeDigitsReq {
+    repeated int32 nums = 1;
+
+}
+message AddSomeDigitsResp {
+    optional int32 sum = 1;
+
+}
+
+// 定义接口
+service AlphaSvr {
+    // svr id，一般为svr所使用的端口号
+
+    // 两个数字相加
+    rpc AddTwoDigits(AddTwoDigitsReq) returns (AddTwoDigitsResp) {
+        option (phxrpc.CmdID) = 1;
+        option (phxrpc.OptString) = "l:r:";
+        option (phxrpc.Usage) = "-l digit1 -u digit2";
+
+    }
+
+    // 若干个数字相加
+    rpc AddSomeDigits(AddSomeDigitsReq) returns (AddSomeDigitsResp) {
+        option (phxrpc.CmdID) = 2;
+        option (phxrpc.OptString) = 'v:';
+        option (phxrpc.Usage) = "-v digit_split_by_&";
+
+    }
+
+}
